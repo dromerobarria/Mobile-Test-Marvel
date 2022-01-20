@@ -1,0 +1,3 @@
+enum ViewFactoryType {
+    case greetings
+}

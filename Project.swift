@@ -24,13 +24,27 @@ let scripts: [TargetScript] = [
     .swiftFormat,
 ]
 
+// MARK: - Extra infoPlist
+
+public let infoPlist: [String: InfoPlist.Value] = [
+    "UIApplicationSceneManifest": [
+        "UIApplicationSupportsMultipleScenes": false,
+        "UISceneConfigurations": [
+            "UIWindowSceneSessionRoleApplication": [["UISceneConfigurationName": "Default Configuration",
+                                                     "UISceneDelegateClassName": "MobileTestMarvel.SceneDelegate"]],
+        ],
+    ],
+    "UIAppFonts": ["SF-Pro-Display-Regular.otf", "SF-Pro-Display-Semibold.otf", "SF-Pro-Display-Bold.otf", "SF-Pro-Display-Heavy.otf"],
+    "NSAppTransportSecurity": ["NSAllowsArbitraryLoads": true],
+]
+
 // MARK: - Project
 
 let target = Target(name: "MobileTestMarvel",
                     platform: .iOS,
                     product: .app,
                     bundleId: "io.tuist.MobileTestMarvel",
-                    infoPlist: .default,
+                    infoPlist: .extendingDefault(with: infoPlist),
                     sources: ["Targets/MobileTestMarvel/Sources/**"],
                     resources: ["Targets/MobileTestMarvel/Resources/**"],
                     scripts: scripts,
