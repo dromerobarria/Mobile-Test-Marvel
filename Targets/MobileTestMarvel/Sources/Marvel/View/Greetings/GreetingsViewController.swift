@@ -61,7 +61,13 @@ class GreetingsViewController: UIViewController {
 }
 
 extension GreetingsViewController: ButtonCellDelegate {
-    func didTap() {}
+    func didTap() {
+        let countersVC = ViewFactory.viewController(type: .superHeroesList)
+        countersVC.view.backgroundColor = Theme.current.primaryBackground
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(countersVC, animated: true)
+        }
+    }
 }
 
 extension GreetingsViewController {

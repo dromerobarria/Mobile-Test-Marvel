@@ -8,6 +8,11 @@ class ViewFactory {
             let dataSource = GreetingsDataSource()
             return GreetingsViewController(delegate: delegate,
                                            dataSource: dataSource)
+        case .superHeroesList:
+            let delegate = SuperHeroesListDelegate()
+            let dataSource = SuperHeroesListDataSource()
+            let presenter = SuperHeroesListPresenter()
+            return SuperHeroesListViewController(presenter: presenter, delegate: delegate, dataSource: dataSource)
         }
     }
 }
