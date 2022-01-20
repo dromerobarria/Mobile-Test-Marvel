@@ -8,14 +8,14 @@ jobs:
     name: Run iOS Tests
     runs-on: macOS-latest
     env: 
-      DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
       MINT_PATH: ${{ github.workspace }}/mint
     strategy:
       matrix:
         destination: ['platform=iOS Simulator,name=iPhone 8']#
     steps:
-      - name: Force Xcode 12
-        run: sudo xcode-select -switch /Applications/Xcode_12.app
+      - name: Force Xcode 12.5.1
+        run: sudo xcode-select -switch /Applications/Xcode_12.5.1.app
       - name: Clean Dependencies
         run: tuist dependencies clean
       - name: Fetch Dependencies
