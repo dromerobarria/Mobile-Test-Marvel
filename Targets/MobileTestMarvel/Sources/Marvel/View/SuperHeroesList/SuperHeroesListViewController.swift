@@ -10,7 +10,8 @@ class SuperHeroesListViewController: UIViewController, ActivityIndicatorPresente
     internal var activityIndicator = UIActivityIndicatorView(style: .large)
     let tableView = UITableView()
     var status = SuperHeoresListViewStatus.loading
-
+    var model = ""
+    
     init(
         presenter: SuperHeroesListPresenterProtocol,
         delegate: SuperHeroesListDelegate,
@@ -48,7 +49,6 @@ class SuperHeroesListViewController: UIViewController, ActivityIndicatorPresente
         configureSetUpNavigationBar()
         prepareSearchController()
     }
-
 
     func configureSetUpNavigationBar() {
         navigationController?.navigationBar.prefersLargeTitles = true

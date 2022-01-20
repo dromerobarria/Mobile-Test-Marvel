@@ -1,22 +1,6 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-/*
-                +-------------+
-                |             |
-                |     App     | Contains MobileTestMarvel App target and MobileTestMarvel unit-test target
-                |             |
-         +------+-------------+-------+
-         |         depends on         |
-         |                            |
- +----v-----+                   +-----v-----+
- |          |                   |           |
- |   Kit    |                   |     UI    |   Two independent frameworks to share code and start modularising your app
- |          |                   |           |
- +----------+                   +-----------+
-
- */
-
 // MARK: - Scripts
 
 let scripts: [TargetScript] = [
@@ -51,25 +35,25 @@ let target = Target(name: "MobileTestMarvel",
                     dependencies: [
                     ])
 
-let targetTest = Target(name: "MobileTestMarvelKit",
+let targetTest = Target(name: "MobileTestMarvelTests",
                         platform: .iOS,
-                        product: .app,
+                        product: .unitTests,
                         bundleId: "io.tuist.MobileTestMarvel",
                         infoPlist: .default,
-                        sources: ["Targets/MobileTestMarvelKit/Sources/**"],
+                        sources: ["Targets/MobileTestMarvel/Tests/**"],
                         dependencies: [
+                            .target(name: "MobileTestMarvel"),
                         ])
 
-let targetTestUI = Target(name: "MobileTestMarvelUI",
-                          platform: .iOS,
-                          product: .app,
-                          bundleId: "io.tuist.MobileTestMarvel",
-                          infoPlist: .default,
-                          sources: ["Targets/MobileTestMarvelUI/Sources/**"],
-                          dependencies: [
-                          ])
-
-let scheme = Scheme(name: "MobileTestMarvel", shared: true, buildAction: .buildAction(targets: ["MobileTestMarvel"]), runAction: .runAction(configuration: .debug, executable: "MobileTestMarvel"))
+let schemes: [Scheme] = [
+    Scheme(
+        name: "MobileTestMarvel iOS",
+        shared: true,
+        buildAction: .buildAction(targets: ["MobileTestMarvel"]),
+        testAction: .targets(["MobileTestMarvelTests"]),
+        runAction: .runAction(executable: "MobileTestMarvel")
+    ),
+]
 
 // Creates our project using a helper function defined in ProjectDescriptionHelpers
 
@@ -80,8 +64,5 @@ let prj = Project(name: "MobileTestMarvel",
                   targets: [
                       target,
                       targetTest,
-                      targetTestUI,
                   ],
-                  schemes: [
-                      scheme,
-                  ])
+                  schemes: schemes)
