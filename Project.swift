@@ -20,6 +20,7 @@ public let infoPlist: [String: InfoPlist.Value] = [
     ],
     "UIAppFonts": ["SF-Pro-Display-Regular.otf", "SF-Pro-Display-Semibold.otf", "SF-Pro-Display-Bold.otf", "SF-Pro-Display-Heavy.otf"],
     "NSAppTransportSecurity": ["NSAllowsArbitraryLoads": true],
+    "UILaunchStoryboardName": "LaunchScreen",
 ]
 
 // MARK: - Project
@@ -30,9 +31,11 @@ let target = Target(name: "MobileTestMarvel",
                     bundleId: "io.tuist.MobileTestMarvel",
                     infoPlist: .extendingDefault(with: infoPlist),
                     sources: ["Targets/MobileTestMarvel/Sources/**"],
-                    resources: ["Targets/MobileTestMarvel/Resources/**"],
+                    resources: ["Targets/MobileTestMarvel/Resources/**", "Targets/MobileTestMarvel/Resources/*.storyboard"],
                     scripts: scripts,
                     dependencies: [
+                        .external(name: "Mimic"),
+                        .external(name: "Kingfisher"),
                     ])
 
 let targetTest = Target(name: "MobileTestMarvelTests",

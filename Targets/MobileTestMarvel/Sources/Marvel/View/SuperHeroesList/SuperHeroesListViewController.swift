@@ -6,17 +6,24 @@ class SuperHeroesListViewController: UIViewController, ActivityIndicatorPresente
     private var presenter: SuperHeroesListPresenterProtocol
     private let searchController = UISearchController(searchResultsController: nil)
     private var refreshControl = UIRefreshControl()
+    private var viewModel: [SuperHeroesViewModel] = []
+
+    private var changeAmountButton = UIBarButtonItem()
+    private var spacerButton = UIBarButtonItem()
+    private var totalButton = UIBarButtonItem()
+    private var amount: String = SuperHeroesListContants.amount20
 
     internal var activityIndicator = UIActivityIndicatorView(style: .large)
+
     let tableView = UITableView()
     var status = SuperHeoresListViewStatus.loading
-    var model = ""
-    
+
     init(
         presenter: SuperHeroesListPresenterProtocol,
         delegate: SuperHeroesListDelegate,
         dataSource: SuperHeroesListDataSource
     ) {
+        viewModel = []
         status = SuperHeoresListViewStatus.loading
         self.presenter = presenter
         self.dataSource = dataSource
@@ -46,8 +53,32 @@ class SuperHeroesListViewController: UIViewController, ActivityIndicatorPresente
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setToolbarHidden(false, animated: false)
+
+        configureSetUpToolBar()
         configureSetUpNavigationBar()
         prepareSearchController()
+        presenter.refreshSuperHeroes(amount: amount)
+    }
+
+    func configureSetUpToolBar() {
+        var buttonsToolBar = [UIBarButtonItem]()
+        navigationController?.toolbar.setItems([], animated: true)
+        spacerButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+
+        totalButton = UIBarButtonItem(title: String(format: SuperHeroesListContants.ToolBar.title,
+                                                    viewModel.count),
+                                      style: .plain,
+                                      target: self,
+                                      action: nil)
+
+        totalButton.isEnabled = false
+        totalButton.tintColor = SuperHeroesListContants.ToolBar.textColor
+        changeAmountButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editTapped))
+        spacerButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        buttonsToolBar = [spacerButton, totalButton, spacerButton, changeAmountButton]
+
+        navigationController?.toolbar.tintColor = SuperHeroesListContants.ToolBar.tintColor
+        navigationController?.toolbar.setItems(buttonsToolBar, animated: true)
     }
 
     func configureSetUpNavigationBar() {
@@ -68,42 +99,19 @@ class SuperHeroesListViewController: UIViewController, ActivityIndicatorPresente
 
     private func prepareSearchController() {
         guard searchController.searchBar.superview == nil else { return }
+
         searchController.searchResultsUpdater = self
-        searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = true
-        searchController.searchBar.searchTextField.clearButtonMode = .never
         searchController.searchBar.placeholder = SuperHeroesListContants.SearchBar.placeholder
-        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self])
-            .setTitleTextAttributes(
-                [NSAttributedString.Key.foregroundColor: SuperHeroesListContants.ToolBar.tintColor],
-                for: .normal
-            )
-
-        if #available(iOS 11.0, *) {
-            searchController.searchBar.clipsToBounds = true
-            searchController.searchBar.barTintColor = SuperHeroesListContants.SearchBar.barTintColor
-            navigationItem.hidesSearchBarWhenScrolling = false
-            navigationItem.searchController = searchController
-
-            guard #available(iOS 13.0, *) else {
-                navigationController?.navigationBar.layer.shadowColor = UIColor.clear.cgColor
-                return
-            }
-        } else {
-            searchController.searchBar.layer.borderWidth = SuperHeroesListContants.SearchBar.borderWidth
-            searchController.searchBar.layer.borderColor = SuperHeroesListContants.SearchBar.barTintColor.cgColor
-            searchController.searchBar.barTintColor = SuperHeroesListContants.SearchBar.barTintColor
-            tableView.tableHeaderView = searchController.searchBar
-        }
-
-        navigationController?.view.setNeedsLayout()
-        addAccessibilityIdentifierToSearchBarForTesting(searchController: searchController)
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+        searchController.searchBar.delegate = self
     }
 
     private func prepareRefresh() {
         refreshControl = UIRefreshControl()
         refreshControl.attributedTitle = NSAttributedString(string: Constants.empty)
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         tableView.refreshControl = refreshControl
     }
 
@@ -122,40 +130,155 @@ class SuperHeroesListViewController: UIViewController, ActivityIndicatorPresente
         Layout.pin(view: tableView, to: view)
     }
 
-    private func registerCells() {}
+    private func registerCells() {
+        let superHeroeCellIdentifier = String(describing: SuperHeroeCell.self)
+        tableView.register(SuperHeroeCell.self, forCellReuseIdentifier: superHeroeCellIdentifier)
+        let emptyCellIdentifier = String(describing: EmptyCell.self)
+        tableView.register(EmptyCell.self, forCellReuseIdentifier: emptyCellIdentifier)
+        let errorCellIdentifier = String(describing: ErrorCell.self)
+        tableView.register(ErrorCell.self, forCellReuseIdentifier: errorCellIdentifier)
+        let NoResultCellIdentifier = String(describing: NoResultCell.self)
+        tableView.register(NoResultCell.self, forCellReuseIdentifier: NoResultCellIdentifier)
+    }
 
-    func configureNavigationBar() {}
+    private func configureToolBar() {
+        DispatchQueue.main.async { [self] in
+            var buttonsToolBar = [UIBarButtonItem]()
+            self.navigationController?.toolbar.setItems([], animated: true)
+            self.spacerButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
 
-    func configureToolBar() {}
+            switch self.status {
+            case .error, .empty:
+                self.totalButton = UIBarButtonItem(title: "",
+                                                   style: .plain,
+                                                   target: self,
+                                                   action: nil)
+            default:
+                self.totalButton = UIBarButtonItem(title: String(format: SuperHeroesListContants.ToolBar.title,
+                                                                 String(viewModel.count)),
+                                                   style: .plain,
+                                                   target: self,
+                                                   action: nil)
+            }
+
+            self.totalButton.isEnabled = false
+            self.totalButton.tintColor = SuperHeroesListContants.ToolBar.textColor
+            self.changeAmountButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(self.editTapped))
+            self.spacerButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+            buttonsToolBar = [self.spacerButton, self.totalButton, self.spacerButton, self.changeAmountButton]
+
+            self.navigationController?.toolbar.tintColor = SuperHeroesListContants.ToolBar.tintColor
+            self.navigationController?.toolbar.setItems(buttonsToolBar, animated: true)
+        }
+    }
+
+    @objc
+    func refresh() {
+        presenter.refreshSuperHeroes(amount: amount)
+        searchController.isActive = false
+        DispatchQueue.main.async {
+            self.refreshControl.endRefreshing()
+        }
+    }
+
+    @objc
+    private func editTapped(_: UIBarButtonItem) {
+        searchController.searchBar.text = ""
+        let alert = UIAlertController(title: SuperHeroesListContants.titleAmount, message: SuperHeroesListContants.detailAmount, preferredStyle: .actionSheet)
+
+        alert.addAction(UIAlertAction(title: SuperHeroesListContants.amount20, style: .default, handler: { _ in
+            self.amount = SuperHeroesListContants.amount20
+            self.presenter.refreshSuperHeroes(amount: self.amount)
+        }))
+
+        alert.addAction(UIAlertAction(title: SuperHeroesListContants.amount50, style: .default, handler: { _ in
+            self.amount = SuperHeroesListContants.amount50
+            self.presenter.refreshSuperHeroes(amount: self.amount)
+        }))
+
+        alert.addAction(UIAlertAction(title: SuperHeroesListContants.amount100, style: .default, handler: { _ in
+            self.amount = SuperHeroesListContants.amount100
+            self.presenter.refreshSuperHeroes(amount: self.amount)
+        }))
+
+        alert.popoverPresentationController?.sourceView = view
+
+        present(alert, animated: true)
+    }
 }
 
-extension SuperHeroesListViewController: SuperHeroesListViewProtocol {}
-
-extension SuperHeroesListViewController {
-    private func addAccessibilityIdentifierToSearchBarForTesting(searchController: UISearchController) {
-        guard #available(iOS 13.0, *) else {
-            // swiftlint:disable:next line_length
-            // searchTextField is only available on iOS 13 and up, ignoring the rest if version is lesser// https://developer.apple.com/documentation/uikit/uisearchbar/3175433-searchtextfield
-            return
+extension SuperHeroesListViewController: SuperHeroesListViewProtocol {
+    func showFilter(superHeroes: [SuperHeroesViewModel]) {
+        viewModel = superHeroes
+        DispatchQueue.main.async {
+            if superHeroes.isEmpty {
+                self.status = SuperHeoresListViewStatus.notResult
+            } else {
+                self.status = SuperHeoresListViewStatus.withData
+            }
+            self.configureToolBar()
+            self.tableView.reloadSections(IndexSet(integer: .zero), with: .automatic)
         }
-        searchController.searchBar.searchTextField.isAccessibilityElement = true
-        searchController.searchBar.searchTextField.accessibilityIdentifier = SuperHeroesListContants.SearchBar.accessibilityIdentifier
+    }
+
+    func showLoading(status: Bool) {
+        DispatchQueue.main.async {
+            guard status else {
+                self.hideActivityIndicator()
+                return
+            }
+            self.showActivityIndicator()
+        }
+    }
+
+    func show(superHeroes: [SuperHeroesViewModel]) {
+        viewModel = superHeroes
+        if viewModel.isEmpty {
+            status = SuperHeoresListViewStatus.empty
+        } else {
+            status = SuperHeoresListViewStatus.withData
+        }
+        configureToolBar()
+
+        DispatchQueue.main.async {
+            self.tableView.reloadSections(IndexSet(integer: .zero), with: .none)
+        }
+    }
+
+    func showError(message _: String) {}
+
+    var superHeroesListViewModel: [SuperHeroesViewModel] {
+        return viewModel
     }
 }
 
 extension SuperHeroesListViewController: UISearchResultsUpdating {
-    func updateSearchResults(for _: UISearchController) {
-        if searchController.isActive {}
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBar = searchController.searchBar
+        presenter.filter(superHeroes: searchBar.text)
     }
 }
 
 extension SuperHeroesListViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_: UISearchBar) {
         navigationController?.navigationBar.prefersLargeTitles = true
+        presenter.filter(superHeroes: nil)
     }
 
     func searchBarShouldBeginEditing(_: UISearchBar) -> Bool {
         navigationController?.navigationBar.prefersLargeTitles = false
-        return true
+        return !viewModel.isEmpty
+    }
+}
+
+extension SuperHeroesListViewController: ErrorCellDelegate {
+    func didTap() {
+        presenter.refreshSuperHeroes(amount: amount)
+    }
+}
+
+extension SuperHeroesListViewController: EmptyCellDelegate {
+    func didTapButton() {
+        presenter.refreshSuperHeroes(amount: amount)
     }
 }

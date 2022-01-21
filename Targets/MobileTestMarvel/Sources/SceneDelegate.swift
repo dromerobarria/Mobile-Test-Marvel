@@ -16,7 +16,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
 
-    func loadStubsIfNeeded() {}
+    func loadStubsIfNeeded() {
+        // StubService.stubAll()
+
+        #if DEBUG
+            let testHelper = TestsHelper()
+            testHelper.checkForRunningTests()
+            if EnvironmentHelper.current == .stubbed, !testHelper.runningUnitTests() {
+                StubService.stubAll()
+            }
+        #endif
+    }
 
     func sceneDidDisconnect(_: UIScene) {}
 

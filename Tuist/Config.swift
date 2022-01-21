@@ -2,6 +2,6 @@ import ProjectDescription
 
 let config = Config(
     generationOptions: [
-        .enableCodeCoverage(.all)
+        .enableCodeCoverage(.all),
     ]
 )
