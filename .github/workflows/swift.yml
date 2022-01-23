@@ -32,6 +32,8 @@ jobs:
         with:
           command: 'generate'
           arguments: ''
+      - name: Install pods
+        run: pod install --repo-update
       - name: Testing iOS with Device 
         run: exec ./Scripts/test_app.sh
       - name: Run Danger - ${{ github.head_ref }} to - ${{ github.base_ref }}

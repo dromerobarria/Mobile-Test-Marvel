@@ -7,7 +7,7 @@ struct SuperHeroesListContants {
     static let amount20 = "20"
     static let amount50 = "50"
     static let amount100 = "100"
-    
+
     enum TableView {
         static let backgroundColor = Theme.current.primaryLight
         static let accessibilityIdentifier = "MarvelListTable"

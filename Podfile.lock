@@ -1,0 +1,30 @@
+PODS:
+  - Mimic (1.0.0)
+  - Nimble (9.2.1)
+  - Realm (10.18.0):
+    - Realm/Headers (= 10.18.0)
+  - Realm/Headers (10.18.0)
+  - RealmSwift (10.18.0):
+    - Realm (= 10.18.0)
+
+DEPENDENCIES:
+  - Mimic (~> 1.0.0)
+  - Nimble
+  - RealmSwift
+
+SPEC REPOS:
+  trunk:
+    - Mimic
+    - Nimble
+    - Realm
+    - RealmSwift
+
+SPEC CHECKSUMS:
+  Mimic: 8704fb8e08b18874e464950aeff31caa5884f55a
+  Nimble: e7e615c0335ee4bf5b0d786685451e62746117d5
+  Realm: b8b0a36bf48c39c50fd8cee7ac34005e6d887ddd
+  RealmSwift: fe2f33d731f47aaf4c3618930f9f7cf7b935c33f
+
+PODFILE CHECKSUM: 9bd5b0a00d819fb6886f45e56bb305a2d048b8a9
+
+COCOAPODS: 1.11.2

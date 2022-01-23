@@ -34,8 +34,6 @@ let target = Target(name: "MobileTestMarvel",
                     resources: ["Targets/MobileTestMarvel/Resources/**", "Targets/MobileTestMarvel/Resources/*.storyboard"],
                     scripts: scripts,
                     dependencies: [
-                        .external(name: "Mimic"),
-                        .external(name: "Kingfisher"),
                     ])
 
 let targetTest = Target(name: "MobileTestMarvelTests",
@@ -45,7 +43,6 @@ let targetTest = Target(name: "MobileTestMarvelTests",
                         infoPlist: .default,
                         sources: ["Targets/MobileTestMarvel/Tests/**"],
                         dependencies: [
-                            .external(name: "Mimic"),
                             .target(name: "MobileTestMarvel"),
                         ])
 
