@@ -4,8 +4,7 @@ import ProjectDescriptionHelpers
 // MARK: - Scripts
 
 let scripts: [TargetScript] = [
-    .swiftLint,
-    .swiftFormat,
+    .swiftFormat
 ]
 
 // MARK: - Extra infoPlist
