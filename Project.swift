@@ -45,6 +45,7 @@ let targetTest = Target(name: "MobileTestMarvelTests",
                         infoPlist: .default,
                         sources: ["Targets/MobileTestMarvel/Tests/**"],
                         dependencies: [
+                            .external(name: "Mimic"),
                             .target(name: "MobileTestMarvel"),
                         ])
 
