@@ -23,17 +23,18 @@ class GreetingsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .red
         navigationController?.setNavigationBarHidden(true, animated: false)
         prepareTableView()
         registerCells()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
 
     private func prepareTableView() {
@@ -61,7 +62,13 @@ class GreetingsViewController: UIViewController {
 }
 
 extension GreetingsViewController: ButtonCellDelegate {
-    func didTap() {}
+    func didTap() {
+        let superHeroesVC = ViewFactory.viewController(type: .superHeroesList)
+        superHeroesVC.view.backgroundColor = Theme.current.primaryBackground
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(superHeroesVC, animated: true)
+        }
+    }
 }
 
 extension GreetingsViewController {

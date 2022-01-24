@@ -2,7 +2,7 @@ import UIKit
 
 struct GreetingsContants {
     static let title1 = "Welcome to"
-    static let title2 = "Mavel App"
+    static let title2 = "Marvel App"
     static let subTitle = "An app that show SuperHeroes from Marvel and more."
 
     static let buttonTitle = "Continue"

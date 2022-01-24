@@ -1,5 +1,3 @@
-import MobileTestMarvelKit
-import MobileTestMarvelUI
 import UIKit
 // swiftlint:disable line_length
 @main

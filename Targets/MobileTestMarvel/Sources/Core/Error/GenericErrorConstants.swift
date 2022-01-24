@@ -7,7 +7,7 @@ enum GenericErrorConstants {
 }
 
 enum NetworkErrorConstants {
-    static let title = "Couldn’t load the counters"
+    static let title = "Couldn’t load the superhores"
     static let description = "The Internet connection appears to be offline."
     static let code = -1009
 }

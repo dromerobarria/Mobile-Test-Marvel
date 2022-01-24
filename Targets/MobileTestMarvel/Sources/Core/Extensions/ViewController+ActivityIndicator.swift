@@ -3,7 +3,23 @@ import UIKit
 protocol AlertsDelegate: AnyObject {}
 
 // swiftlint:disable all
-class Alerts: NSObject {}
+class Alerts: NSObject {
+    func showSimpleAlert(controller: UIViewController,
+                         title: String,
+                         message: String)
+    {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        alert.view.tintColor = Theme.current.secondarySolid
+        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertAction.Style.default, handler: { _ in
+        }))
+        if let popoverController = alert.popoverPresentationController {
+            popoverController.sourceView = controller.view
+            popoverController.sourceRect = CGRect(x: controller.view.bounds.midX, y: controller.view.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+        controller.present(alert, animated: true, completion: nil)
+    }
+}
 
 // swiftlint:enable all
 
@@ -17,6 +33,7 @@ public protocol ActivityIndicatorPresenter {
 public extension ActivityIndicatorPresenter where Self: UIViewController {
     func showActivityIndicator() {
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.style = .large
         view.addSubview(activityIndicator)
         activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true

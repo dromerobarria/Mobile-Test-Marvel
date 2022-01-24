@@ -1,10 +1,9 @@
 # CodeCov
 xcov.report(
-   scheme: 'Counters',
+   scheme: 'MobileTestMarvel',
    workspace: './MobileTestMarvel.xcworkspace',
-   minimum_coverage_percentage: 65.0
+   minimum_coverage_percentage: 1.0
 )
 
 # Swiftlint Report
-swiftlint.config_file = '.swiftlint.yml'
-swiftlint.lint_files inline_mode: true
+swiftlint.config_file = 'Tuist/.swiftlint.yml'

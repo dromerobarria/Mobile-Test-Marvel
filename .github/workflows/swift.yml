@@ -3,28 +3,46 @@ on:
     branches:
       - main
       - develop
+      
+
 jobs:
   iOS:
     name: Run iOS Tests
     runs-on: macOS-latest
     env: 
-      DEVELOPER_DIR: /Applications/Xcode_12.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_12.5.1.app/Contents/Developer
       MINT_PATH: ${{ github.workspace }}/mint
     strategy:
       matrix:
         destination: ['platform=iOS Simulator,name=iPhone 8']#
     steps:
-      - name: Force Xcode 12
-        run: sudo xcode-select -switch /Applications/Xcode_12.app
-      - name: Clean Dependencies
-        run: tuist dependencies clean
-      - name: Fetch Dependencies
-        run: tuist dependencies fetch
-      - name: Create Workspace
-        run: tuist generate
-      - name: Testing iOS with Device - ${{ matrix.destination }}
-        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -workspace "MobileTestMarvel.xcworkspace" -scheme "MobileTestMarvel" -destination "${{ matrix.destination }}" clean test | xcpretty
+      - name: Force Xcode 12.5.1
+        run: sudo xcode-select -switch /Applications/Xcode_12.5.1.app
+      - uses: actions/checkout@v1
+      - uses: actions/setup-ruby@v1
+        with:
+            ruby-version: '2.6'
+      - uses: actions/cache@v1
+        with:
+            path: vendor/bundle
+            key: ${{ runner.os }}-gems-${{ hashFiles('Gemfile') }} # change your gemfile path
+            restore-keys: |
+              ${{ runner.os }}-gems-
+      - uses: tuist/tuist-action@0.13.0
+        with:
+          command: 'generate'
+          arguments: ''
+      - name: Install pods
+        run: pod install --repo-update
+      - name: Testing iOS with Device 
+        run: exec ./Scripts/test_app.sh
       - name: Run Danger - ${{ github.head_ref }} to - ${{ github.base_ref }}
-        run: bundle exec danger --verbose
+        uses: MeilCli/danger-action@v5
+        with:
+            plugins_file: 'Gemfile'
+            install_path: 'vendor/bundle'
+            danger_file: 'Dangerfile'
+            danger_id: 'danger-pr'
         env:
-          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+            DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      

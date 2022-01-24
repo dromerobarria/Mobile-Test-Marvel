@@ -1,0 +1,34 @@
+PODS:
+  - Kingfisher (7.1.1)
+  - Mimic (1.0.0)
+  - Nimble (9.2.1)
+  - Realm (10.18.0):
+    - Realm/Headers (= 10.18.0)
+  - Realm/Headers (10.18.0)
+  - RealmSwift (10.18.0):
+    - Realm (= 10.18.0)
+
+DEPENDENCIES:
+  - Kingfisher
+  - Mimic (~> 1.0.0)
+  - Nimble
+  - RealmSwift (~> 10)
+
+SPEC REPOS:
+  trunk:
+    - Kingfisher
+    - Mimic
+    - Nimble
+    - Realm
+    - RealmSwift
+
+SPEC CHECKSUMS:
+  Kingfisher: f738f9c4a3415823b8e2985d10aa2d6a9f37bc4d
+  Mimic: 8704fb8e08b18874e464950aeff31caa5884f55a
+  Nimble: e7e615c0335ee4bf5b0d786685451e62746117d5
+  Realm: b8b0a36bf48c39c50fd8cee7ac34005e6d887ddd
+  RealmSwift: fe2f33d731f47aaf4c3618930f9f7cf7b935c33f
+
+PODFILE CHECKSUM: 9a1e607ca6c512a7c894d57a4d80009e071571db
+
+COCOAPODS: 1.11.2
