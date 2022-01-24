@@ -26,7 +26,7 @@ extension SuperHeroeDetailDataSource: UITableViewDataSource {
         else {
             fatalError("This should never happen")
         }
-        
+
         let viewData = SuperHeroeDetailCellViewData(heroe: viewModel)
 
         let viewStyle = SuperHeroeDetailCellViewStyle()

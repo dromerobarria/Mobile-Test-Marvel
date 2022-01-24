@@ -11,7 +11,7 @@ struct SuperHeroesListContants {
     enum TableView {
         static let backgroundColor = Theme.current.primaryLight
         static let accessibilityIdentifier = "MarvelListTable"
-        static let estimatedRowHeight:CGFloat = 70
+        static let estimatedRowHeight: CGFloat = 70
     }
 
     enum SearchBar {
