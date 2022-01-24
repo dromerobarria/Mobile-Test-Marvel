@@ -46,13 +46,13 @@ extension SuperHeroesListDataSource: UITableViewDataSource {
         else {
             fatalError("This should never happen")
         }
-        guard let viewController = viewController else { return cell }
 
         let viewData = SuperHeroeCellViewData(heroe: heroes[indexPath.row])
 
-        let viewStyle = SuperHeroesCellViewStyle()
+        let viewStyle = SuperHeroeCellViewStyle()
 
         cell.selectionStyle = .none
+        cell.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
         cell.setup(viewData: viewData, viewStyle: viewStyle)
         return cell
     }

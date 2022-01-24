@@ -65,8 +65,7 @@ class SuperHeroesListViewController: UIViewController, ActivityIndicatorPresente
         navigationController?.toolbar.setItems([], animated: true)
         spacerButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
 
-        totalButton = UIBarButtonItem(title: String(format: SuperHeroesListContants.ToolBar.title,
-                                                    viewModel.count),
+        totalButton = UIBarButtonItem(title: SuperHeroesListContants.ToolBar.emptyTitle,
                                       style: .plain,
                                       target: self,
                                       action: nil)
@@ -106,6 +105,7 @@ class SuperHeroesListViewController: UIViewController, ActivityIndicatorPresente
         navigationItem.searchController = searchController
         definesPresentationContext = true
         searchController.searchBar.delegate = self
+      
     }
 
     private func prepareRefresh() {
@@ -123,7 +123,7 @@ class SuperHeroesListViewController: UIViewController, ActivityIndicatorPresente
         tableView.showsVerticalScrollIndicator = false
         tableView.separatorStyle = .none
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 70
+        tableView.estimatedRowHeight = SuperHeroesListContants.TableView.estimatedRowHeight
         tableView.isScrollEnabled = true
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         view.addAutoLayout(subview: tableView)
@@ -205,9 +205,23 @@ class SuperHeroesListViewController: UIViewController, ActivityIndicatorPresente
 
         present(alert, animated: true)
     }
+
+    func routeToDetail(indexPath: IndexPath) {
+        presenter.getSuperHeroesDetail(id: String(viewModel[indexPath.row].id))
+    }
 }
 
 extension SuperHeroesListViewController: SuperHeroesListViewProtocol {
+    func showErrorDetail(message _: String) {
+        DispatchQueue.main.async {
+            Alerts().showSimpleAlert(
+                controller: self,
+                title: SuperHeroesListContants.Alert.Error.title,
+                message: SuperHeroesListContants.Alert.Error.message
+            )
+        }
+    }
+
     func showError(message _: String, superHeroes: [SuperHeroesViewModel]) {
         if superHeroes.isEmpty {
             status = SuperHeoresListViewStatus.error
@@ -263,6 +277,15 @@ extension SuperHeroesListViewController: SuperHeroesListViewProtocol {
 
         DispatchQueue.main.async {
             self.tableView.reloadSections(IndexSet(integer: .zero), with: .none)
+        }
+    }
+
+    func showDetail(superHeroes: SuperHeroesViewModel) {
+        DispatchQueue.main.async {
+            let superHeroesVC = ViewFactory.viewController(type: .superHeroeDetail) as! SuperHeroeDetailViewController
+            superHeroesVC.view.backgroundColor = Theme.current.primaryBackground
+            superHeroesVC.viewModel = superHeroes
+            self.navigationController?.pushViewController(superHeroesVC, animated: true)
         }
     }
 

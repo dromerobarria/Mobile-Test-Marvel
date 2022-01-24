@@ -11,6 +11,7 @@ struct SuperHeroesListContants {
     enum TableView {
         static let backgroundColor = Theme.current.primaryLight
         static let accessibilityIdentifier = "MarvelListTable"
+        static let estimatedRowHeight:CGFloat = 70
     }
 
     enum SearchBar {
@@ -36,6 +37,7 @@ struct SuperHeroesListContants {
 
     enum ToolBar {
         static let title = "%@ heroes"
+        static let emptyTitle = "Loadiing Heroes"
         static let tintColor = Theme.current.secondarySolid
         static let textColor = Theme.current.primaryDark
     }

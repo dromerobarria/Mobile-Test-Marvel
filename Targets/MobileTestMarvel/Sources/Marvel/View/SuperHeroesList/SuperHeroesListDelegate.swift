@@ -22,4 +22,9 @@ extension SuperHeroesListDelegate: UITableViewDelegate {
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         self.tableView(tableView, heightForRowAt: indexPath)
     }
+
+    func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let viewController = viewController else { return }
+        viewController.routeToDetail(indexPath: indexPath)
+    }
 }

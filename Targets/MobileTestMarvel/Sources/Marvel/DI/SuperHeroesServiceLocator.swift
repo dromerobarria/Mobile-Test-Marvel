@@ -17,12 +17,12 @@ class SuperHeroesServiceLocator {
                                     codableHelper: codableHelper)
     }
 
-    private var counterDataSource: SuperHeroesDataSource {
+    private var superHeroesDataSource: SuperHeroesDataSource {
         return SuperHeroesApiDataSource(restApi: marvelRestApi)
     }
 
     private var superHeroesRepository: SuperHeroesRepository {
-        return SuperHeroesApiRepository(dataSource: counterDataSource,
+        return SuperHeroesApiRepository(dataSource: superHeroesDataSource,
                                         superHeroesMapper: superHeroesModelToEntityMapper,
                                         errorMapper: errorModelToEntityMapper)
     }
@@ -37,6 +37,10 @@ class SuperHeroesServiceLocator {
 
     var superHeroesListUseCase: SuperHeroesListUseCase {
         return SuperHeroesListUseCase(repository: superHeroesRepository)
+    }
+
+    var detailSuperHeroeUseCase: DetailSuperHeroeUseCase {
+        return DetailSuperHeroeUseCase(repository: superHeroesRepository)
     }
 
     var superHeroesViewModelMapper: Mapper<SuperHeroesViewModel, SuperHeroesModel> {

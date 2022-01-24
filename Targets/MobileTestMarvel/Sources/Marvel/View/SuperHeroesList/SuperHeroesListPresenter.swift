@@ -1,6 +1,7 @@
 class SuperHeroesListPresenter: SuperHeroesListPresenterProtocol {
     private var view: SuperHeroesListViewProtocol?
     private let superHeroesListUseCase: SuperHeroesListUseCase
+    private let detailSuperHeroeUseCase: DetailSuperHeroeUseCase
 
     private let superHeroesViewModelMapper: Mapper<SuperHeroesViewModel, SuperHeroesModel>
     var superHeroes = [SuperHeroesViewModel]()
@@ -9,8 +10,9 @@ class SuperHeroesListPresenter: SuperHeroesListPresenterProtocol {
         self.view = view
     }
 
-    init(superHeroesListUseCase: SuperHeroesListUseCase, superHeroesViewModelMapper: Mapper<SuperHeroesViewModel, SuperHeroesModel>) {
+    init(superHeroesListUseCase: SuperHeroesListUseCase, detailSuperHeroeUseCase: DetailSuperHeroeUseCase, superHeroesViewModelMapper: Mapper<SuperHeroesViewModel, SuperHeroesModel>) {
         self.superHeroesListUseCase = superHeroesListUseCase
+        self.detailSuperHeroeUseCase = detailSuperHeroeUseCase
         self.superHeroesViewModelMapper = superHeroesViewModelMapper
     }
 
@@ -46,5 +48,19 @@ class SuperHeroesListPresenter: SuperHeroesListPresenterProtocol {
         }
 
         view?.showFilter(superHeroes: filteredSuperHeroes)
+    }
+
+    func getSuperHeroesDetail(id: String) {
+        view?.showLoading(status: true)
+        detailSuperHeroeUseCase.detail(id: id) { result in
+            self.view?.showLoading(status: false)
+            switch result {
+            case let .success(superHeroe):
+                let viewModels = self.superHeroesViewModelMapper.reverseMap(value: superHeroe)
+                self.view?.showDetail(superHeroes: viewModels)
+            case let .failure(error):
+                self.view?.showErrorDetail(message: error.message)
+            }
+        }
     }
 }

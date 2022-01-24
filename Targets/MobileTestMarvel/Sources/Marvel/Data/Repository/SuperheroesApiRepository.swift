@@ -16,8 +16,21 @@ class SuperHeroesApiRepository: SuperHeroesRepository {
     func list(amount: String, completionHandler: @escaping (Result<[SuperHeroesModel], ErrorModel>) -> Void) {
         dataSource.list(amount: amount) { result in
             switch result {
-            case let .success(countersEntity):
-                let model = self.superHeroesMapper.reverseMap(values: countersEntity)
+            case let .success(superHeroeEntity):
+                let model = self.superHeroesMapper.reverseMap(values: superHeroeEntity)
+                completionHandler(.success(model))
+            case let .failure(errorEntity):
+                let error = self.errorMapper.reverseMap(value: errorEntity)
+                completionHandler(.failure(error))
+            }
+        }
+    }
+
+    func detail(id: String, completionHandler: @escaping (Result<SuperHeroesModel, ErrorModel>) -> Void) {
+        dataSource.detail(id: id) { result in
+            switch result {
+            case let .success(superHeroeEntity):
+                let model = self.superHeroesMapper.reverseMap(value: superHeroeEntity)
                 completionHandler(.success(model))
             case let .failure(errorEntity):
                 let error = self.errorMapper.reverseMap(value: errorEntity)

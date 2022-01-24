@@ -10,4 +10,10 @@ class SuperHeroesApiDataSource: SuperHeroesDataSource {
             completionHandler(result)
         }
     }
+
+    func detail(id: String, completionHandler: @escaping (Result<SuperHeroesEntity, ErrorEntity>) -> Void) {
+        marvelRestApi.detail(id: id) { result in
+            completionHandler(result)
+        }
+    }
 }

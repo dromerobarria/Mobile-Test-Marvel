@@ -1,6 +1,9 @@
 import UIKit
 
 struct SuperHeroesCellContants {
+    
+    static let imageExtension = ".jpg"
+    
     enum ContentView {
         static let backgroundColor = UIColor.clear
         static let insets = UIEdgeInsets(top: 14, left: 12, bottom: 14, right: 12)

@@ -1,6 +1,6 @@
 import UIKit
 
-struct SuperHeroesCellViewStyle {
+struct SuperHeroeDetailCellViewStyle {
     let titleFont: UIFont
     let titleColor: UIColor
     let contentBackgroundColor: UIColor

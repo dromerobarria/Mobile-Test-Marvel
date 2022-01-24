@@ -1,21 +1,24 @@
 import Kingfisher
 import UIKit
+import WebKit
 
-class SuperHeroeCell: UITableViewCell {
+class SuperHeroeDetailCell: UITableViewCell {
     private let stackView = UIStackView(frame: .zero)
     private let containerView = UIView(frame: .zero)
     private let titleLabel = UILabel(frame: .zero)
     private let imageContentView = UIImageView(frame: .zero)
+    private let detailLabel = UILabel(frame: .zero)
+    private var webView = WKWebView(frame: .zero)
     private var containerInsets = UIEdgeInsets.zero
 
-    private var viewData: SuperHeroeCellViewData?
-    private var viewStyle: SuperHeroeCellViewStyle?
+    private var viewData: SuperHeroeDetailCellViewData?
+    private var viewStyle: SuperHeroeDetailCellViewStyle?
 
     // MARK: - Initialization
 
     func setup(
-        viewData: SuperHeroeCellViewData,
-        viewStyle: SuperHeroeCellViewStyle = SuperHeroeCellViewStyle()
+        viewData: SuperHeroeDetailCellViewData,
+        viewStyle: SuperHeroeDetailCellViewStyle = SuperHeroeDetailCellViewStyle()
     ) {
         self.viewData = viewData
         self.viewStyle = viewStyle
@@ -54,7 +57,6 @@ class SuperHeroeCell: UITableViewCell {
         stackView.addArrangedSubview(titleLabel)
 
         containerView.addAutoLayout(subview: stackView)
-        Layout.centerYAnchor(of: stackView, in: containerView)
 
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(
@@ -69,14 +71,48 @@ class SuperHeroeCell: UITableViewCell {
                 equalTo: containerView.topAnchor,
                 constant: 0
             ),
-            stackView.bottomAnchor.constraint(
+        ])
+
+        imageContentView.heightAnchor.constraint(equalToConstant: SuperHeroesCellContants.Icon.height).isActive = true
+        imageContentView.widthAnchor.constraint(equalToConstant: SuperHeroesCellContants.Icon.width).isActive = true
+
+        containerView.addAutoLayout(subview: detailLabel)
+        NSLayoutConstraint.activate([
+            detailLabel.leadingAnchor.constraint(
+                equalTo: containerView.leadingAnchor,
+                constant: 0
+            ),
+            detailLabel.trailingAnchor.constraint(
+                equalTo: containerView.trailingAnchor,
+                constant: 0
+            ),
+            detailLabel.topAnchor.constraint(
+                equalTo: stackView.bottomAnchor,
+                constant: 50
+            ),
+        ])
+
+        containerView.addAutoLayout(subview: webView)
+        NSLayoutConstraint.activate([
+            webView.leadingAnchor.constraint(
+                equalTo: containerView.leadingAnchor,
+                constant: 0
+            ),
+            webView.trailingAnchor.constraint(
+                equalTo: containerView.trailingAnchor,
+                constant: 0
+            ),
+            webView.topAnchor.constraint(
+                equalTo: detailLabel.bottomAnchor,
+                constant: 50
+            ),
+            webView.bottomAnchor.constraint(
                 equalTo: containerView.bottomAnchor,
                 constant: 0
             ),
         ])
 
-        imageContentView.heightAnchor.constraint(equalToConstant: SuperHeroesCellContants.Icon.height).isActive = true
-        imageContentView.widthAnchor.constraint(equalToConstant: SuperHeroesCellContants.Icon.width).isActive = true
+        webView.heightAnchor.constraint(equalToConstant: 500).isActive = true
     }
 
     private func prepareContent() {
@@ -93,11 +129,40 @@ class SuperHeroeCell: UITableViewCell {
         titleLabel.font = ErrorCellConstants.Title.font
         titleLabel.sizeToFit()
 
-        guard let url = URL(string: heroe.thumbnail.path + SuperHeroesCellContants.imageExtension) else {
+        var resultDescription = ""
+        if heroe.resultDescription.isEmpty {
+            resultDescription = "There is no description aviable for \(heroe.name)"
+        } else {
+            resultDescription = heroe.resultDescription
+        }
+
+        detailLabel.accessibilityIdentifier = viewStyle?.titleAccessibilityIdentifier
+        detailLabel.backgroundColor = .clear
+        detailLabel.text = resultDescription
+        detailLabel.textColor = SuperHeroesCellContants.TitleLabel.textColor
+        detailLabel.numberOfLines = SuperHeroesCellContants.TitleLabel.numberOfLines
+        detailLabel.textAlignment = .left
+        detailLabel.font = ErrorCellConstants.Title.font
+        detailLabel.sizeToFit()
+
+        guard let url = URL(string: heroe.thumbnail.path + ".jpg") else {
             fatalError("Unable to load image heroe")
         }
 
         imageContentView.kf.setImage(with: url, placeholder: SuperHeroeCellImages.Icons.superHeroeMarvel, options: [.transition(.fade(1))])
+
+        let wiki = heroe.urls.filter { $0.type == .wiki }
+
+        guard let wikiFirst = wiki.first else {
+            return
+        }
+
+        guard let urlWiki = URL(string: wikiFirst.url) else {
+            fatalError("Unable to load wiki heroe")
+        }
+
+        webView.load(URLRequest(url: urlWiki))
+        webView.allowsBackForwardNavigationGestures = true
     }
 
     // MARK: - Public
