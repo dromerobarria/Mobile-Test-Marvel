@@ -39,4 +39,11 @@ struct SuperHeroesListContants {
         static let tintColor = Theme.current.secondarySolid
         static let textColor = Theme.current.primaryDark
     }
+
+    enum Alert {
+        enum Error {
+            static let title = "We are sorry"
+            static let message = "Right now, we cant accommodate your request at this time. Try again later."
+        }
+    }
 }

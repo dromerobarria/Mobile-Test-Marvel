@@ -208,6 +208,27 @@ class SuperHeroesListViewController: UIViewController, ActivityIndicatorPresente
 }
 
 extension SuperHeroesListViewController: SuperHeroesListViewProtocol {
+    func showError(message _: String, superHeroes: [SuperHeroesViewModel]) {
+        if superHeroes.isEmpty {
+            status = SuperHeoresListViewStatus.error
+            DispatchQueue.main.async {
+                self.tableView.reloadSections(IndexSet(integer: 0), with: .none)
+            }
+        } else {
+            status = SuperHeoresListViewStatus.withData
+            DispatchQueue.main.async {
+                Alerts().showSimpleAlert(
+                    controller: self,
+                    title: SuperHeroesListContants.Alert.Error.title,
+                    message: SuperHeroesListContants.Alert.Error.message
+                )
+                self.viewModel = superHeroes
+                self.configureToolBar()
+                self.tableView.reloadSections(IndexSet(integer: 0), with: .none)
+            }
+        }
+    }
+
     func showFilter(superHeroes: [SuperHeroesViewModel]) {
         viewModel = superHeroes
         DispatchQueue.main.async {
@@ -244,8 +265,6 @@ extension SuperHeroesListViewController: SuperHeroesListViewProtocol {
             self.tableView.reloadSections(IndexSet(integer: .zero), with: .none)
         }
     }
-
-    func showError(message _: String) {}
 
     var superHeroesListViewModel: [SuperHeroesViewModel] {
         return viewModel

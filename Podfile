@@ -14,8 +14,8 @@ target 'MobileTestMarvel' do
   pod 'Mimic', '~> 1.0.0'
   pod 'Nimble'
   pod 'Kingfisher'
-  pod 'RealmSwift'
-
+  pod 'RealmSwift', '~>10'
+  
   target 'MobileTestMarvelTests' do
     inherit! :search_paths
     # Pods for testing

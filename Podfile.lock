@@ -12,7 +12,7 @@ DEPENDENCIES:
   - Kingfisher
   - Mimic (~> 1.0.0)
   - Nimble
-  - RealmSwift
+  - RealmSwift (~> 10)
 
 SPEC REPOS:
   trunk:
@@ -29,6 +29,6 @@ SPEC CHECKSUMS:
   Realm: b8b0a36bf48c39c50fd8cee7ac34005e6d887ddd
   RealmSwift: fe2f33d731f47aaf4c3618930f9f7cf7b935c33f
 
-PODFILE CHECKSUM: 6cd520de73c9df50017d6cee915cd718fe60cd5b
+PODFILE CHECKSUM: 9a1e607ca6c512a7c894d57a4d80009e071571db
 
 COCOAPODS: 1.11.2

@@ -21,10 +21,12 @@ class SuperHeroesListPresenter: SuperHeroesListPresenterProtocol {
             switch result {
             case let .success(superHeroes):
                 let viewModels = self.superHeroesViewModelMapper.reverseMap(values: superHeroes)
+                SuperHeroesDB.updateSuperHeroes(superHeroesModels: viewModels)
                 self.superHeroes = viewModels
                 self.view?.show(superHeroes: viewModels)
             case let .failure(error):
-                self.view?.showError(message: error.message)
+                self.superHeroes = SuperHeroesDB.all()
+                self.view?.showError(message: error.message, superHeroes: self.superHeroes)
             }
         }
     }
