@@ -12,11 +12,11 @@ class StubServiceTests: TestCase {
     }
 
     func testStubAll() {
-        StubService.stubAll()
-        assertCounterStubsService()
+        //StubService.stubAll()
+        //assertSuperHeroesStubsService()
     }
 
-    private func assertCounterStubsService() {
+    private func assertSuperHeroesStubsService() {
         let network = MarvelNetwork(environment: .stubbed)
 
         var request = URLRequest(url: URL(string: network.url(for: .list))!)

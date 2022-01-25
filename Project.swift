@@ -7,6 +7,13 @@ let scripts: [TargetScript] = [
     .swiftFormat,
 ]
 
+// MARK: - SnapShot
+
+let environments: [String: String] = [
+    "FB_REFERENCE_IMAGE_DIR": "Targets/MobileTestMarvel/Tests/ReferenceImages",
+    "IMAGE_DIFF_DIR": "Targets/MobileTestMarvel/Tests/FailureDiffs",
+]
+
 // MARK: - Extra infoPlist
 
 public let infoPlist: [String: InfoPlist.Value] = [
@@ -28,35 +35,35 @@ let target = Target(name: "MobileTestMarvel",
                     platform: .iOS,
                     product: .app,
                     bundleId: "io.tuist.MobileTestMarvel",
+                    deploymentTarget: .iOS(targetVersion: "14.5", devices: .iphone),
                     infoPlist: .extendingDefault(with: infoPlist),
                     sources: ["Targets/MobileTestMarvel/Sources/**"],
                     resources: ["Targets/MobileTestMarvel/Resources/**", "Targets/MobileTestMarvel/Resources/*.storyboard"],
                     scripts: scripts,
                     dependencies: [
-                    ])
+                    ],
+                    environment: environments)
 
 let targetTest = Target(name: "MobileTestMarvelTests",
                         platform: .iOS,
                         product: .unitTests,
                         bundleId: "io.tuist.MobileTestMarvel",
+                        deploymentTarget: .iOS(targetVersion: "14.5", devices: .iphone),
                         infoPlist: .default,
                         sources: ["Targets/MobileTestMarvel/Tests/**"],
                         dependencies: [
                             .target(name: "MobileTestMarvel"),
-                        ])
-
-let environments: [String: String] = [
-    "FB_REFERENCE_IMAGE_DIR": "$(SOURCE_ROOT)/Targets/MobileTestMarvel/Tests/ReferenceImages",
-    "IMAGE_DIFF_DIR": "$(SOURCE_ROOT)/Targets/MobileTestMarvel/Tests/FailureDiffs",
-]
+                        ],
+                        environment: environments)
 
 let schemes: [Scheme] = [
     Scheme(
         name: "MobileTestMarvel iOS",
         shared: true,
         buildAction: .buildAction(targets: ["MobileTestMarvel"]),
-        testAction: .targets(["MobileTestMarvelTests"]),
-        runAction: .runAction(executable: "MobileTestMarvel", arguments: Arguments(environment: environments))
+        testAction: .targets(["MobileTestMarvelTests"], arguments: Arguments(environment: environments)),
+        runAction: .runAction(executable: "MobileTestMarvel",
+                              arguments: Arguments(environment: environments))
     ),
 ]
 

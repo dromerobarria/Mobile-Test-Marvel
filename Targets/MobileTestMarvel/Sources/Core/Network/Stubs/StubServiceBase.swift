@@ -56,7 +56,7 @@ class StubServiceBase<T, D>: NSObject {
         {
             return data
         } else {
-            fatalError("File: \(fileName), not found un Bundle")
+            fatalError("File: \(fileName), not found a Bundle")
         }
     }
 
