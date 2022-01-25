@@ -45,13 +45,18 @@ let targetTest = Target(name: "MobileTestMarvelTests",
                             .target(name: "MobileTestMarvel"),
                         ])
 
+let environments: [String: String] = [
+    "FB_REFERENCE_IMAGE_DIR": "$(SOURCE_ROOT)/Targets/MobileTestMarvel/Tests/ReferenceImages",
+    "IMAGE_DIFF_DIR": "$(SOURCE_ROOT)/Targets/MobileTestMarvel/Tests/FailureDiffs",
+]
+
 let schemes: [Scheme] = [
     Scheme(
         name: "MobileTestMarvel iOS",
         shared: true,
         buildAction: .buildAction(targets: ["MobileTestMarvel"]),
         testAction: .targets(["MobileTestMarvelTests"]),
-        runAction: .runAction(executable: "MobileTestMarvel")
+        runAction: .runAction(executable: "MobileTestMarvel", arguments: Arguments(environment: environments))
     ),
 ]
 

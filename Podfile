@@ -18,6 +18,7 @@ target 'MobileTestMarvel' do
   
   target 'MobileTestMarvelTests' do
     inherit! :search_paths
+    pod 'iOSSnapshotTestCase'
     # Pods for testing
   end
 
