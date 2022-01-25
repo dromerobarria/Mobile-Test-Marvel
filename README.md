@@ -13,6 +13,7 @@ Go to the `Marvel` folder
 ```ruby
 cd Marvel
 Tuist generate 
+pod install
 ```
 
 Extra: In the case Realm(Data base pod) present problem in Xcode, please run
