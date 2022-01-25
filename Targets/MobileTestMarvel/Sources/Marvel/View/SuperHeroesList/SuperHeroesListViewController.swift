@@ -105,7 +105,6 @@ class SuperHeroesListViewController: UIViewController, ActivityIndicatorPresente
         navigationItem.searchController = searchController
         definesPresentationContext = true
         searchController.searchBar.delegate = self
-      
     }
 
     private func prepareRefresh() {

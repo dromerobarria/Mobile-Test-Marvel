@@ -12,12 +12,13 @@ target 'MobileTestMarvel' do
   # Pods for MobileTestMarvel
 
   pod 'Mimic', '~> 1.0.0'
-  pod 'Nimble'
+  pod 'Nimble', :git => 'https://github.com/Quick/Nimble.git', :branch => 'main'
   pod 'Kingfisher'
   pod 'RealmSwift', '~>10'
   
   target 'MobileTestMarvelTests' do
     inherit! :search_paths
+    pod 'iOSSnapshotTestCase'
     # Pods for testing
   end
 
