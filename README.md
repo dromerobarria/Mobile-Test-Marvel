@@ -36,6 +36,8 @@ pod install --repo-update --verbose
 
 *Pipeline was using GithubActions
 
+*Danger was use for the coverage (At the moment is 40% coverage to keep on PRs, could be more but should be upgrade coverage for cell/viewController/Presenter of the superHeroesList flow)
+
 ## Git Workflow
 It was using the standard [GitFlow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow).
 
