@@ -2,7 +2,7 @@
 xcov.report(
    scheme: 'MobileTestMarvel',
    workspace: './MobileTestMarvel.xcworkspace',
-   minimum_coverage_percentage: 1.0
+   minimum_coverage_percentage: 40.0
 )
 
 # Swiftlint Report

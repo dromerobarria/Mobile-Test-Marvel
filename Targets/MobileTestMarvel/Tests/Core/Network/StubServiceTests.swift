@@ -12,8 +12,8 @@ class StubServiceTests: TestCase {
     }
 
     func testStubAll() {
-        //StubService.stubAll()
-        //assertSuperHeroesStubsService()
+        // StubService.stubAll()
+        // assertSuperHeroesStubsService()
     }
 
     private func assertSuperHeroesStubsService() {

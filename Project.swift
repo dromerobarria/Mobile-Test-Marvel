@@ -61,7 +61,7 @@ let schemes: [Scheme] = [
         name: "MobileTestMarvel iOS",
         shared: true,
         buildAction: .buildAction(targets: ["MobileTestMarvel"]),
-        testAction: .targets(["MobileTestMarvelTests"], arguments: Arguments(environment: environments)),
+        testAction: .targets(["MobileTestMarvelTests"], arguments: Arguments(environment: environments),options: .options(coverage: true)),
         runAction: .runAction(executable: "MobileTestMarvel",
                               arguments: Arguments(environment: environments))
     ),
