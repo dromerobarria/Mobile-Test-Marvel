@@ -38,6 +38,8 @@ pod install --repo-update --verbose
 
 *Danger was use for the coverage (At the moment is 40% coverage to keep on PRs, could be more but should be upgrade coverage for cell/viewController/Presenter of the superHeroesList flow)
 
+*To use some standard in the code, It was use SwiftLint and SwiftFormat
+
 ## Git Workflow
 It was using the standard [GitFlow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow).
 
