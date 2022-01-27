@@ -49,7 +49,18 @@ It was build following Clean Architecture and MVP with Repository pattern
 ## Aproach problem
 
 The app containst 3 mayor flows
-*grettings to manage some introductions of the app
+
+*Grettings to manage some introductions of the app
+
+<img src="static/1.png" width="200">
+
+
 *SuperHeroesList to present and request the superheroes from marvel api 
+
+<img src="static/2.png" width="200">
+<img src="static/3.png" width="200">
+
 *SuperHeroeDetail to show some description of the superheroe, and call the wiki url in the screen
 
+<img src="static/4.png" width="200">
+<img src="static/5.png" width="200">
