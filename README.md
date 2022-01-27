@@ -55,7 +55,7 @@ The app containst 3 mayor flows
 <img src="static/1.png" width="200">
 
 
-*SuperHeroesList to present and request the superheroes from marvel api, it can be edit to request diferents amounts of heroes (29,30 ....) 
+*SuperHeroesList to present and request the superheroes from marvel api, it can be edit to request diferents amounts of heroes (20,30 ....) 
 
 <img src="static/2.png" width="200">
 <img src="static/3.png" width="200">
